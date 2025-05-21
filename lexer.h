@@ -28,6 +28,9 @@ void append_token(Tokens *tokens, char *inside, enum Token_Type type);
 
 #ifdef LEXER_IMPLEMENTATION
 
+#include <stdlib.h>
+#include <string.h>
+
 #define usage(argc, argv) do { printf("Usage: %s <path-to-file>\n", argv[0]); } while(0);
 
 void read_entire_file(Buffer *buffer, char *file_path) {

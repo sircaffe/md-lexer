@@ -1,8 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <assert.h>
 
 #define LEXER_IMPLEMENTATION
 #include "lexer.h"
