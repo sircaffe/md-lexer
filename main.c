@@ -76,8 +76,17 @@ Token *lexer_init(Buffer *buffer) {
     return tokens;
 }
 
-int main(void) {
-    char *file_path = "test.md";
+int main(int argc, char **argv) {
+    char *file_path = argv[1];
+    if (argc > 2) {
+        fprintf(stderr, "ERROR: Too many arguments\n");
+        fprintf(stderr, "Usage: %s <path-to-file>\n", argv[0]);
+        return 1; 
+    } else if (argc < 2) {
+        fprintf(stderr, "ERROR: Too few arguments\n");
+        fprintf(stderr, "Usage: %s <path-to-file>\n", argv[0]);
+        return 1;
+    }
 
     Buffer buffer = {0};
     if (!read_entire_file(&buffer, file_path)) return 1;
