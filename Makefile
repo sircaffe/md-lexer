@@ -1,5 +1,5 @@
-main: main.c
-	gcc -o main main.c -Wall -Wextra -DDEBUG_INFO
+lexer: lexer.c
+	gcc -o lexer lexer.c -Wall -Wextra -DDEBUG_INFO
 
 clean:
-	rm main
+	rm lexer

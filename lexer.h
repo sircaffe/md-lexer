@@ -1,8 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <assert.h>
+#ifndef LEXER_H
+#define LEXER_H
 
 enum Token_Type {
     STRING = 0,
@@ -26,11 +23,18 @@ typedef struct {
     size_t size;
 } Buffer;
 
-bool read_entire_file(Buffer *buffer, char *file_path) {
+void read_entire_file(Buffer *buffer, char *file_path);
+void append_token(Tokens *tokens, char *inside, enum Token_Type type);
+
+#ifdef LEXER_IMPLEMENTATION
+
+#define usage(argc, argv) do { printf("Usage: %s <path-to-file>\n", argv[0]); } while(0);
+
+void read_entire_file(Buffer *buffer, char *file_path) {
     FILE *f = fopen(file_path, "r");
     if (f == NULL) {
         fprintf(stderr, "ERROR: Unable to open file `%s`\n", file_path);
-        return false;
+        exit(1);
     }
 
     fseek(f, 0, SEEK_END);
@@ -46,7 +50,6 @@ bool read_entire_file(Buffer *buffer, char *file_path) {
 
     if (bytes_count < buffer->size) {
         fprintf(stderr, "ERROR: Bytes read smaller than file size: %zu and %zu\n", bytes_count, buffer->size);
-        return false;
     }
 
 #ifdef DEBUG_INFO
@@ -54,7 +57,6 @@ bool read_entire_file(Buffer *buffer, char *file_path) {
 #endif
 
     fclose(f);
-    return true;
 }
 
 void append_token(Tokens *tokens, char *inside, enum Token_Type type) {
@@ -90,9 +92,8 @@ void append_token(Tokens *tokens, char *inside, enum Token_Type type) {
     }
 }
 
-
 // TODO: Implement function that expects current and subsequent tokens
-void lexer_init(Tokens *tokens, Buffer *buffer) {
+void lex_from_buffer(Tokens *tokens, Buffer *buffer) {
     size_t token_count = 0;
     size_t line_ruler = 0;
 
@@ -126,39 +127,5 @@ void lexer_init(Tokens *tokens, Buffer *buffer) {
     }
 }
 
-#define usage(argc, argv) do { printf("Usage: %s <path-to-file>\n", argv[0]); } while(0);
-
-int main(int argc, char **argv) {
-    char *file_path = argv[1];
-    if (argc > 2) {
-        usage(argc, argv);
-        fprintf(stderr, "ERROR: Too many arguments\n");
-        return 1; 
-    } else if (argc < 2) {
-        usage(argc, argv);
-        fprintf(stderr, "ERROR: Too few arguments\n");
-        return 1;
-    }
-
-    Buffer buffer = {0};
-    if (!read_entire_file(&buffer, file_path)) return 1;
-
-    Tokens tokens = {0};
-    lexer_init(&tokens, &buffer);
-
-    for (size_t i = 0; i < tokens.count; ++i) {
-        if (tokens.tokens[i].type == HASH) {
-            printf("> Token %zu: HASH = %s\n", i, tokens.tokens[i].inside);
-        } else if (tokens.tokens[i].type == LIST) {
-            printf("> Token %zu: LIST = %s\n", i, tokens.tokens[i].inside);
-        }
-    }
-
-#ifdef DEBUG_INFO
-    printf("DEBUG: %zu tokens found\n", tokens.count);
-#endif
-
-    free(buffer.data);
-
-    return 0;
-}
+#endif // NOB_IMPLEMENTATION
+#endif // LEXER_H

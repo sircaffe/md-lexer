@@ -1,5 +1,9 @@
-## Get started
+## Try it out
 ```console
 $ make
-$ ./main
+$ ./lexer
+```
+To clean up afterwards:
+```console
+$ make clean
 ```
