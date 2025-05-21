@@ -148,9 +148,9 @@ int main(int argc, char **argv) {
 
     for (size_t i = 0; i < tokens.count; ++i) {
         if (tokens.tokens[i].type == HASH) {
-            printf("> Token %zu HASH = %s\n", i, tokens.tokens[i].inside);
+            printf("> Token %zu: HASH = %s\n", i, tokens.tokens[i].inside);
         } else if (tokens.tokens[i].type == LIST) {
-            printf("> Token %zu LIST = %s\n", i, tokens.tokens[i].inside);
+            printf("> Token %zu: LIST = %s\n", i, tokens.tokens[i].inside);
         }
     }
 
